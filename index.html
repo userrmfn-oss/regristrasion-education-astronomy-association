@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Portal Marga EAA</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: radial-gradient(circle at top, #020617, #000);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* WELCOME */
+#welcomeScreen {
+  position: fixed;
+  inset: 0;
+  background: black;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:white;
+  z-index:999;
+  animation: fadeOut 1s forwards;
+  animation-delay:2.5s;
+}
+
+/* RGB */
+#welcomeScreen h2 {
+  font-size: 22px;
+  background: linear-gradient(90deg, #ff00ff, #00ffff, #a855f7, #22d3ee);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rgbGlow 3s linear infinite;
+}
+
+@keyframes rgbGlow {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+@keyframes fadeOut {
+  to { opacity:0; visibility:hidden; }
+}
+
+/* HEADER */
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 20px;
+  background: linear-gradient(90deg,#a855f7,#6366f1,#22d3ee);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+#typingTitle::after {
+  content: "|";
+  animation: blink 0.7s infinite;
+}
+
+@keyframes blink { 50%{opacity:0;} }
+
+.header p {
+  font-size: 11px;
+  color: #f59e0b;
+}
+
+/* CARD */
+.container {
+  width: 360px;
+  padding: 25px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(20px);
+}
+
+/* LABEL */
+.label {
+  font-size: 11px;
+  color: #ef4444;
+  margin-bottom: 4px;
+}
+
+/* INPUT */
+input, select, textarea {
+  width: 100%;
+  padding: 13px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.05);
+  color: white;
+}
+
+/* BUTTON */
+button {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  margin-top: 8px;
+  font-weight: bold;
+  background: linear-gradient(90deg,#3b82f6,#a855f7);
+  color: white;
+}
+
+/* SUCCESS */
+.success {
+  display:none;
+  text-align:center;
+  color:white;
+}
+</style>
+</head>
+
+<body>
+
+<div id="welcomeScreen">
+  <h2>SELAMAT DATANG NEW MEMBER</h2>
+</div>
+
+<div class="container">
+
+<div id="formPage">
+
+<div class="header">
+  <h1 id="typingTitle"></h1>
+  <p>EDUCATION ASTRONOMI ASSOCIATION</p>
+</div>
+
+<div class="label">NAMA LENGKAP</div>
+<input id="nama" placeholder="Nama asli...">
+
+<div class="label">UMUR</div>
+<input id="umur" type="number" placeholder="Minimal 11">
+
+<div class="label">GENDER</div>
+<select id="gender">
+  <option value="">Pilih</option>
+  <option>Laki-laki</option>
+  <option>Perempuan</option>
+</select>
+
+<div class="label">SOSIAL MEDIA (Opsional)</div>
+<input id="sumber" placeholder="Sosial (opsional)">
+
+<div class="label">ALASAN BERGABUNG</div>
+<textarea id="tujuan" placeholder="Alasan"></textarea>
+
+<div class="label">ILMU ASTRONOMI</div>
+<textarea id="astro" placeholder="Astronomi"></textarea>
+
+<button onclick="kirimWA()">KIRIM KE SISTEM BINTANG</button>
+
+</div>
+
+<div class="success" id="successPage">
+  <h2>🚀 Data Berhasil Masuk ke Sistem!</h2>
+
+  <button onclick="kirimOwner()">Kirim ke Owner</button>
+  <button onclick="kirimCo()">Kirim ke Co Owner</button>
+  <button onclick="bukaGrup()">Gabung Grup</button>
+</div>
+
+</div>
+
+<script>
+
+// typing (anti double run)
+let txt="EAA SELEKSI MEMBER";
+let i=0;
+function ketik(){
+  if(i<txt.length){
+    document.getElementById("typingTitle").innerHTML += txt[i];
+    i++;
+    setTimeout(ketik,70);
+  }
+}
+ketik();
+
+// simpan pesan
+let pesanFix="";
+
+// VALIDASI KUAT
+function kirimWA(){
+
+  let nama = document.getElementById("nama");
+  let umurEl = document.getElementById("umur");
+  let gender = document.getElementById("gender");
+  let tujuan = document.getElementById("tujuan");
+  let astro = document.getElementById("astro");
+  let sumber = document.getElementById("sumber");
+
+  if(!nama.value.trim()){
+    alert("⚠️ Nama wajib diisi!");
+    nama.focus();
+    return;
+  }
+
+  let umur = parseInt(umurEl.value);
+  if(isNaN(umur) || umur < 11){
+    alert("⚠️ Umur minimal 11 tahun!");
+    umurEl.focus();
+    return;
+  }
+
+  if(!gender.value){
+    alert("⚠️ Pilih gender!");
+    gender.focus();
+    return;
+  }
+
+  if(!tujuan.value.trim()){
+    alert("⚠️ Alasan wajib diisi!");
+    tujuan.focus();
+    return;
+  }
+
+  if(!astro.value.trim()){
+    alert("⚠️ Isi bagian astronomi!");
+    astro.focus();
+    return;
+  }
+
+  pesanFix=`REGISTRASI EAA
+
+Nama: ${nama.value.trim()}
+Umur: ${umur}
+Gender: ${gender.value}
+Sosial: ${sumber.value.trim() || "-"}
+Alasan: ${tujuan.value.trim()}
+Astronomi: ${astro.value.trim()}`;
+
+  document.getElementById("formPage").style.display="none";
+  document.getElementById("successPage").style.display="block";
+}
+
+// nomor owner
+const nomorOwner = "6285177126077";
+
+// owner (aman)
+function kirimOwner(){
+  if(!pesanFix){
+    alert("⚠️ Data belum dibuat!");
+    return;
+  }
+  window.location.href = "https://wa.me/"+nomorOwner+"?text="+encodeURIComponent(pesanFix);
+}
+
+// co owner (nonaktif)
+function kirimCo(){
+  alert("⚠️ Fitur belum tersedia");
+}
+
+// grup (fix link)
+function bukaGrup(){
+  window.location.href = "https://chat.whatsapp.com/B6iPLYsskj3LOjm3UsolAJ?mode=gi_t";
+}
+
+</script>
+
+</body>
+</html>
